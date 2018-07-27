@@ -57,8 +57,8 @@ void load(){
   gSystem->Load("StPicoDstMaker");
   gSystem->Load("StRefMultCorr");
 
-  //gSystem->Load("StFmsUtil");
-  //gSystem->Load("StFmsDbMaker");
+  gSystem->Load("StFmsUtil");
+  gSystem->Load("StFmsDbMaker");
 
   gSystem->Load("StFlowTreeMaker");
 
