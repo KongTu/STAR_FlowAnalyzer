@@ -467,6 +467,10 @@ Bool_t StFlowTreeMaker::processPicoEvent()
       D_2_trk = Q_0_pt[ipt][charge]*Q_0_1_FMSplus;
 
       cn_tracker_fms[ipt][charge]->Fill(N_2_trk.Re()/D_2_trk.Re(), D_2_trk.Re());
+
+      cn_tracker_fms_real[ipt][charge]->Fill(Q_n1_pt[ipt][charge].Re()/Q_0_pt[ipt][charge].Re(), Q_0_pt[ipt][charge].Re());
+      cn_tracker_fms_imag[ipt][charge]->Fill(Q_n1_pt[ipt][charge].Im()/Q_0_pt[ipt][charge].Re(), Q_0_pt[ipt][charge].Re());
+
     }
   }
 
@@ -613,6 +617,8 @@ void StFlowTreeMaker::bookHistos()
 
       //cn_tracker[ipt][charge] = new TH1D(Form("cn_tracker_%d_%d", ipt, charge),"cn_tracker",100,-1,1);
       cn_tracker_fms[ipt][charge] = new TH1D(Form("cn_tracker_fms_%d_%d", ipt, charge),"cn_tracker_fms",100,-1,1);
+      cn_tracker_fms_real[ipt][charge] = new TH1D(Form("cn_tracker_fms_real_%d_%d", ipt, charge),"cn_tracker_fms",100,-1,1);
+      cn_tracker_fms_imag[ipt][charge] = new TH1D(Form("cn_tracker_fms_imag_%d_%d", ipt, charge),"cn_tracker_fms",100,-1,1);
 
     }
   }
