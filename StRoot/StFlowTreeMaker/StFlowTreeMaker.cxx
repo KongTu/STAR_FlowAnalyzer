@@ -247,7 +247,7 @@ Bool_t StFlowTreeMaker::processPicoEvent()
   TComplex Q_n1_pt[9][2], Q_0_pt[9][2];//pt 1 dimention
   TComplex Q_n1_1[20][9][2], Q_0_1[20][9][2];//eta,pt 2 dimention
   TComplex Q_n3_1_FMSplus, Q_0_1_FMSplus;
-  TComplex Q_n3_1_TPCmins, Q_0_1_TPCminus;
+  TComplex Q_n3_1_TPCminus, Q_0_1_TPCminus;
   TComplex Q_n3_1_TPCplus, Q_0_1_TPCplus;
 
   //loop FMS
@@ -457,29 +457,29 @@ Bool_t StFlowTreeMaker::processPicoEvent()
 /*Three sub-events resolution*/
 
   TComplex N_2_trk, D_2_trk;
-  N_2_trk = Q_n1_TPCplus*TComplex::Conjugate(Q_n1_TPCminus);
-  D_2_trk = Q_0_TPCplus*Q_0_TPCminus;
+  N_2_trk = Q_n3_1_TPCplus*TComplex::Conjugate(Q_n3_1_TPCminus);
+  D_2_trk = Q_0_1_TPCplus*Q_0_1_TPCminus;
 
   cn_QbQc->Fill(N_2_trk.Re()/D_2_trk.Re(), D_2_trk.Re());
 
-  N_2_trk = Q_n1_FMSplus*TComplex::Conjugate(Q_n1_TPCminus);
-  D_2_trk = Q_0_FMSplus*Q_0_TPCminus;
+  N_2_trk = Q_n3_1_FMSplus*TComplex::Conjugate(Q_n3_1_TPCminus);
+  D_2_trk = Q_0_1_FMSplus*Q_0_1_TPCminus;
 
   cn_QaQb->Fill(N_2_trk.Re()/D_2_trk.Re(), D_2_trk.Re());
 
-  N_2_trk = Q_n1_FMSplus*TComplex::Conjugate(Q_n1_TPCplus);
-  D_2_trk = Q_0_FMSplus*Q_0_TPCplus;
+  N_2_trk = Q_n3_1_FMSplus*TComplex::Conjugate(Q_n3_1_TPCplus);
+  D_2_trk = Q_0_1_FMSplus*Q_0_1_TPCplus;
 
   cn_QaQc->Fill(N_2_trk.Re()/D_2_trk.Re(), D_2_trk.Re());
 
-  cn_Qa_real->Fill(Q_n1_FMSplus.Re()/Q_0_FMSplus.Re(), Q_0_FMSplus.Re() );
-  cn_Qa_imag->Fill(Q_n1_FMSplus.Im()/Q_0_FMSplus.Re(), Q_0_FMSplus.Re() );
+  cn_Qa_real->Fill(Q_n3_1_FMSplus.Re()/Q_0_1_FMSplus.Re(), Q_0_1_FMSplus.Re() );
+  cn_Qa_imag->Fill(Q_n3_1_FMSplus.Im()/Q_0_1_FMSplus.Re(), Q_0_1_FMSplus.Re() );
  
-  cn_Qb_real->Fill(Q_n1_TPCminus.Re()/Q_0_TPCminus.Re(), Q_0_TPCminus.Re() );
-  cn_Qb_imag->Fill(Q_n1_TPCminus.Im()/Q_0_TPCminus.Re(), Q_0_TPCminus.Re() );
+  cn_Qb_real->Fill(Q_n3_1_TPCminus.Re()/Q_0_1_TPCminus.Re(), Q_0_1_TPCminus.Re() );
+  cn_Qb_imag->Fill(Q_n3_1_TPCminus.Im()/Q_0_1_TPCminus.Re(), Q_0_1_TPCminus.Re() );
 
-  cn_Qc_real->Fill(Q_n1_TPCplus.Re()/Q_0_TPCplus.Re(), Q_0_TPCplus.Re() );
-  cn_Qc_imag->Fill(Q_n1_TPCplus.Im()/Q_0_TPCplus.Re(), Q_0_TPCplus.Re() );
+  cn_Qc_real->Fill(Q_n3_1_TPCplus.Re()/Q_0_1_TPCplus.Re(), Q_0_1_TPCplus.Re() );
+  cn_Qc_imag->Fill(Q_n3_1_TPCplus.Im()/Q_0_1_TPCplus.Re(), Q_0_1_TPCplus.Re() );
 
 
 /*pt vn*/
@@ -488,8 +488,8 @@ Bool_t StFlowTreeMaker::processPicoEvent()
     for(int charge = 0; charge < 2; charge++){
 
       TComplex N_2_trk, D_2_trk;
-      N_2_trk = Q_n1_pt[ipt][charge] * TComplex::Conjugate( Q_n1_FMSplus );
-      D_2_trk = Q_0_pt[ipt][charge]*Q_0_FMSplus;
+      N_2_trk = Q_n1_pt[ipt][charge] * TComplex::Conjugate( Q_n3_1_FMSplus );
+      D_2_trk = Q_0_pt[ipt][charge]*Q_0_1_FMSplus;
 
       cn_tracker_fms[ipt][charge]->Fill(N_2_trk.Re()/D_2_trk.Re(), D_2_trk.Re());
     }
