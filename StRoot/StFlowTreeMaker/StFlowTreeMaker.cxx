@@ -400,7 +400,7 @@ Bool_t StFlowTreeMaker::processPicoEvent()
       Q_0_1_TPCminus += q_vector(0, 1, weight, phi);
 
     }
-    if( trkEta > 0.5 & trkEta < 1.0 ){
+    if( trkEta > 0.5 && trkEta < 1.0 ){
 
       Q_n3_1_TPCplus += q_vector(2, 1, weight, phi);
       Q_0_1_TPCplus += q_vector(0, 1, weight, phi);
