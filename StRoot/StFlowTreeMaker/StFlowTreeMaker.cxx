@@ -245,7 +245,7 @@ Bool_t StFlowTreeMaker::processPicoEvent()
   
   //Q-vectors
   TComplex Q_n1_pt[9][2], Q_0_pt[9][2];//pt 1 dimention
-  TComplex Q_n1_1[20][9][2], Q_0_1[20][9][2];//eta,pt 2 dimention
+  //TComplex Q_n1_1[20][9][2], Q_0_1[20][9][2];//eta,pt 2 dimention
   TComplex Q_n3_1_FMSplus, Q_0_1_FMSplus;
   TComplex Q_n3_1_TPCminus, Q_0_1_TPCminus;
   TComplex Q_n3_1_TPCplus, Q_0_1_TPCplus;
@@ -426,31 +426,6 @@ Bool_t StFlowTreeMaker::processPicoEvent()
     }//end pT loop
     //end pT
 
-
-    for(int eta = 0; eta < 20; eta++){
-      if( trkEta > etaBin[eta] && trkEta < etaBin[eta+1] ){
-        
-        for( int ipt = 0; ipt < 9; ipt++){
-          if( pt > PCAPtBin[ipt] && pt < PCAPtBin[ipt+1] ){
-           
-            if( pTrack->charge() == +1 ){//positive charge
-
-              Q_n1_1[eta][ipt][0] += q_vector(+2, 1, weight, phi);
-              Q_0_1[eta][ipt][0] += q_vector(0, 1, weight, phi);
-            }
-            if( pTrack->charge() == -1 ){//negative charge
-
-              Q_n1_1[eta][ipt][1] += q_vector(+2, 1, weight, phi);
-              Q_0_1[eta][ipt][1] += q_vector(0, 1, weight, phi);
-            }
-
-          }
-        }//end of pt dimention
-        
-      }
-    }//end of eta dimension
-
-
   }//end of track loop
   
 
@@ -494,28 +469,6 @@ Bool_t StFlowTreeMaker::processPicoEvent()
       cn_tracker_fms[ipt][charge]->Fill(N_2_trk.Re()/D_2_trk.Re(), D_2_trk.Re());
     }
   }
-
-  for(int ieta = 0; ieta < 20; ieta++){
-    for(int jeta = 0; jeta < 20; jeta++){
-
-      double deta = fabs( ieta - jeta );
-      if( deta < 0.5 ) continue;
-
-      for(int ipt = 0; ipt < 9; ipt++){
-        for(int charge = 0; charge < 2; charge++){
-
-          TComplex N_2_trk, D_2_trk;
-          N_2_trk = Q_n1_1[ieta][ipt][charge] * TComplex::Conjugate(Q_n1_1[jeta][ipt][charge]);
-          D_2_trk = Q_0_1[ieta][ipt][charge]*Q_0_1[jeta][ipt][charge];
-          
-          cn_tracker[ipt][charge]->Fill(N_2_trk.Re()/D_2_trk.Re(), D_2_trk.Re());
-        }
-      }
-    }
-  }
-
-
-
 
 
   mNTrks       = nTrks;
@@ -658,7 +611,7 @@ void StFlowTreeMaker::bookHistos()
   for(int ipt = 0; ipt < 9; ipt++){
     for(int charge = 0; charge < 2; charge++){
 
-      cn_tracker[ipt][charge] = new TH1D(Form("cn_tracker_%d_%d", ipt, charge),"cn_tracker",100,-1,1);
+      //cn_tracker[ipt][charge] = new TH1D(Form("cn_tracker_%d_%d", ipt, charge),"cn_tracker",100,-1,1);
       cn_tracker_fms[ipt][charge] = new TH1D(Form("cn_tracker_fms_%d_%d", ipt, charge),"cn_tracker_fms",100,-1,1);
 
     }
