@@ -86,6 +86,8 @@ Int_t StFlowTreeMaker::Make()
 
 	mMuDstMaker = (StMuDstMaker *)GetMaker("MuDst");
 	mPicoDstMaker = (StPicoDstMaker *)GetMaker("picoDst");
+  fmsDbMaker = (StFmsDbMaker *)GetMaker("fmsDb");
+  
 	if(Debug()){
 		LOG_INFO<<"MuDstMaker pointer: "<<mMuDstMaker<<endm;
 		LOG_INFO<<"PicoDstMaker pointer: "<<mPicoDstMaker<<endm;
