@@ -42,13 +42,13 @@
 #include "StBTofRawHit.h"
 #include "StBTofHeader.h"
 /*
-#include "StMtdCollection.h"
-#include "StMtdHeader.h"
-#include "StMtdRawHit.h"
-#include "StMtdHit.h"
-#include "StMtdPidTraits.h"
-#include "StMtdUtil/StMtdGeometry.h"
-*/
+ #include "StMtdCollection.h"
+ #include "StMtdHeader.h"
+ #include "StMtdRawHit.h"
+ #include "StMtdHit.h"
+ #include "StMtdPidTraits.h"
+ #include "StMtdUtil/StMtdGeometry.h"
+ */
 #include "StTpcDedxPidAlgorithm.h"
 #include "StarClassLibrary/StParticleDefinition.hh"
 #include "tables/St_vertexSeed_Table.h"
@@ -91,6 +91,13 @@
 #include "StEEmcUtil/database/EEmcDbItem.h"
 //#include "StEmcUtil/projection/StEmcPosition.h"
 
+#include "StMuDSTMaker/COMMON/StMuFmsUtil.h"
+#include "StFmsDbMaker/StFmsDbMaker.h"
+
+#include "StThreeVectorF.hh"
+#include "StFmsCollection.h"
+#include "StFmsHit.h"
+
 #include "StPicoDstMaker/StPicoDstMaker.h"
 #include "StPicoEvent/StPicoDst.h"
 #include "StPicoEvent/StPicoEvent.h"
@@ -101,18 +108,12 @@
 #include "StPicoEvent/StPicoBTofPidTraits.h"
 #include "StPicoEvent/StPicoBEmcPidTraits.h"
 #include "StPicoEvent/StPicoFmsHit.h"
-
-#include "StMuDSTMaker/COMMON/StMuFmsUtil.h"
-#include "StFmsDbMaker/StFmsDbMaker.h"
-
-#include "StFmsCollection.h"
-#include "StFmsHit.h"
 /*
-#include "tables/St_mtdTriggerTimeCut_Table.h"
-#include "tables/St_mtdModuleToQTmap_Table.h"
-#include "tables/St_mtdQTSlewingCorr_Table.h"
-#include "tables/St_mtdQTSlewingCorrPart2_Table.h"
-
-#include "StRefMultCorr/CentralityMaker.h"
-#include "StRefMultCorr/StRefMultCorr.h"
-*/
+ #include "tables/St_mtdTriggerTimeCut_Table.h"
+ #include "tables/St_mtdModuleToQTmap_Table.h"
+ #include "tables/St_mtdQTSlewingCorr_Table.h"
+ #include "tables/St_mtdQTSlewingCorrPart2_Table.h"
+ 
+ #include "StRefMultCorr/CentralityMaker.h"
+ #include "StRefMultCorr/StRefMultCorr.h"
+ */
