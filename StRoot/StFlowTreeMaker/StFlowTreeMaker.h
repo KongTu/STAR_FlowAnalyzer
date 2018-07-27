@@ -40,6 +40,8 @@ class StEmcRawHit;
 class StMuTrack;
 class StMuMtdHit;
 
+class StFmsDbMaker;
+
 class StPicoDstMaker;
 class StPicoDst;
 class StPicoTrack;
@@ -176,6 +178,7 @@ class StFlowTreeMaker : public StMaker {
 
 		StPicoDstMaker *mPicoDstMaker;
 		StPicoDst      *mPicoDst;
+		StFmsDbMaker *fmsDbMaker;
 
 		//StRefMultCorr *refMultCorr; //decide centrality
 
