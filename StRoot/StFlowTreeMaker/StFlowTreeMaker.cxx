@@ -87,7 +87,7 @@ Int_t StFlowTreeMaker::Make()
 	mMuDstMaker = (StMuDstMaker *)GetMaker("MuDst");
 	mPicoDstMaker = (StPicoDstMaker *)GetMaker("picoDst");
   fmsDbMaker = (StFmsDbMaker *)GetMaker("fmsDb");
-  
+
 	if(Debug()){
 		LOG_INFO<<"MuDstMaker pointer: "<<mMuDstMaker<<endm;
 		LOG_INFO<<"PicoDstMaker pointer: "<<mPicoDstMaker<<endm;
@@ -668,6 +668,7 @@ void StFlowTreeMaker::bookHistos()
 	hdNdxvsP = new TH2D("hdNdxvsP","hdNdxvsP; p (GeV/c); dN/dx",300,0,15,400,0,200);
 	hnSigEvsP = new TH2D("hnSigEvsP","hnSigEvsP; p (GeV/c); n#sigma_{e}",300,0,15,700,-15,20);
 	hBetavsP = new TH2D("hBetavsP","hBetavsP; p (GeV/c); 1/#beta",300,0,15,800,0,4);
+  hFmsXYdis = new TH2D("hFmsXYdis", "hFmsXYdis", 200, -200.0, 200.0, 200, -200, 200);
 }
 //_____________________________________________________________________________
 void StFlowTreeMaker::printConfig()
