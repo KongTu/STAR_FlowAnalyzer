@@ -100,6 +100,13 @@
 #include "StPicoEvent/StPicoMtdPidTraits.h"
 #include "StPicoEvent/StPicoBTofPidTraits.h"
 #include "StPicoEvent/StPicoBEmcPidTraits.h"
+#include "StPicoEvent/StPicoFmsHit.h"
+
+#include "StMuDSTMaker/COMMON/StMuFmsUtil.h"
+#include "StFmsDbMaker/StFmsDbMaker.h"
+
+#include "StFmsCollection.h"
+#include "StFmsHit.h"
 /*
 #include "tables/St_mtdTriggerTimeCut_Table.h"
 #include "tables/St_mtdModuleToQTmap_Table.h"
