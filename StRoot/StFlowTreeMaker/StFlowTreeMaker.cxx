@@ -7,8 +7,8 @@ ClassImp(StFlowTreeMaker)
 StFlowTreeMaker::StFlowTreeMaker(const Char_t *name) : StMaker(name), 
 mFillTree(0), mFillHisto(1), mPrintConfig(1), mPrintMemory(0), mPrintCpu(0), 
 mStreamName("st_physics"), fOutFile(0), mOutFileName(""), mEvtTree(0), 
-mMaxVtxR(1.e4), mMaxVtxZ(1.e4), mMaxVzDiff(1.e4), mMinTrkPt(0.1), mMaxTrkEta(2.), 
-mMinNHitsFit(15), mMinNHitsFitRatio(0.52), mMinNHitsDedx(10), mMaxDca(3.), 
+mMaxVtxR(1.0), mMaxVtxZ(40.0), mMaxVzDiff(3.0), mMinTrkPt(0.1), mMaxTrkEta(2.), 
+mMinNHitsFit(15), mMinNHitsFitRatio(0.51), mMinNHitsDedx(10), mMaxDca(3.), 
 mMaxnSigmaE(2.5), mMaxBeta2TOF(0.03),mEmcCollection(nullptr), mEmcPosition(nullptr), 
 mEmcGeom{},mEmcIndex{}
 {
@@ -220,6 +220,8 @@ Bool_t StFlowTreeMaker::processPicoEvent()
     if(VPD5HM) hEvent->Fill(8.5);
   }
   
+  hVtxZ->Fill( vtxPos.z() );
+
 
   mNTofHits = mPicoDst->numberOfBTofHits();//better one for multiplicity
   mZDCeast = picoEvent->ZdcSumAdcEast();
@@ -387,7 +389,7 @@ Bool_t StFlowTreeMaker::processPicoEvent()
     
     if(TMath::Abs(trkEta)>1.) continue;
     if(pTrack->nHitsFit()<15) continue;
-    if(pTrack->nHitsFit()*1./pTrack->nHitsMax()<0.52) continue;
+    if(pTrack->nHitsFit()*1./pTrack->nHitsMax()<0.51) continue;//zhenyu's version is 0.52
     if(dca>1.) continue;
     if(pt < 0.2) continue;
 
@@ -591,6 +593,8 @@ void StFlowTreeMaker::bookHistos()
 	hEvent->GetXaxis()->SetBinLabel(7,Form("|V_{z}Diff|<%1.2f cm",mMaxVzDiff));
 	hEvent->GetXaxis()->SetBinLabel(8,"VPD5");
 	hEvent->GetXaxis()->SetBinLabel(9,"VPD5HM");
+
+  hVtxZ = new TH1D("hVtxZ","hVtxZ",1000,-50,50);
 
 	hVtxYvsVtxX = new TH2D("hVtxYvsVtxX","hVtxYvsVtxX; V_{x} (cm); V_{y} (cm)",120,-3,3,120,-3,3); 
 	hVPDVzvsTPCVz = new TH2D("hVPDVzvsTPCVz","hVPDVzvsTPCVz; TPC V_{z} (cm); VPD V_{z} (cm)",200,-50,50,200,-50,50);
