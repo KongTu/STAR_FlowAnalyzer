@@ -260,7 +260,9 @@ Bool_t StFlowTreeMaker::processPicoEvent()
     }
     
   if(myCentrality<0) return kFALSE;
-  
+
+  hCentrality->Fill( myCentrality );
+
   Int_t nTrks    = 0;
 
   //Q-vectors
