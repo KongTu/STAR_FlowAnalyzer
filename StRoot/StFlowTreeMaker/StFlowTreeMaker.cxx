@@ -619,7 +619,7 @@ void StFlowTreeMaker::bookHistos()
 	hEvent->GetXaxis()->SetBinLabel(9,"VPD5HM");
 
   hVtxZ = new TH1D("hVtxZ","hVtxZ",1000,-50,50);
-  refMult = new TH1D("refMult","refMult",50000,0,50000);
+  hRefMult = new TH1D("hRefMult","hRefMult",50000,0,50000);
 
 	hVtxYvsVtxX = new TH2D("hVtxYvsVtxX","hVtxYvsVtxX; V_{x} (cm); V_{y} (cm)",120,-3,3,120,-3,3); 
 	hVPDVzvsTPCVz = new TH2D("hVPDVzvsTPCVz","hVPDVzvsTPCVz; TPC V_{z} (cm); VPD V_{z} (cm)",200,-50,50,200,-50,50);
