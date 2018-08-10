@@ -55,7 +55,6 @@ void load(){
   
   gSystem->Load("StPicoEvent");
   gSystem->Load("StPicoDstMaker");
-  gSystem->Load("StRefMultCorr");
 
   gSystem->Load("StFmsUtil");
   gSystem->Load("StFmsDbMaker");
@@ -66,7 +65,9 @@ void load(){
   gSystem->Load("StEEmcDbMaker");
 }
 
-void doEvent(Int_t nEvents=-1, const Char_t *inputFile="root://xrdstar.rcf.bnl.gov:1095//home/starlib/home/starreco/reco/AuAu54_production_2017/ReversedFullField/P18ic/2017/170/18170012/st_physics_adc_18170012_raw_1500006.picoDst.root", const TString outputFile="test.root", const Bool_t debug = kFALSE)
+//void doEvent(Int_t nEvents=-1, const Char_t *inputFile="root://xrdstar.rcf.bnl.gov:1095//home/starlib/home/starreco/reco/AuAu54_production_2017/ReversedFullField/P18ic/2017/170/18170012/st_physics_adc_18170012_raw_1500006.picoDst.root", const TString outputFile="test.root", const Bool_t debug = kFALSE)
+//{
+void doEvent(Int_t nEvents=-1, const Char_t *inputFile="test.list", const TString outputFile="test.root", const Bool_t debug = kFALSE)
 {
 	load();
 
@@ -79,35 +80,41 @@ void doEvent(Int_t nEvents=-1, const Char_t *inputFile="root://xrdstar.rcf.bnl.g
 
 	Bool_t iMuDst = 0;
 
+	string filelist=inputFile;
+        size_t npos=filelist.size();
+        filelist.insert(npos-5,"new");
+        cout<<filelist<<endl;
+
+        char inputFile2[500];
+        sprintf(inputFile2, "%s",filelist.data());
+        ofstream fout(inputFile2);
+
+        ifstream fin(inputFile);
+
+        string name;
+        int evts;
+        vector<string> temp_name;
+        while(!fin.eof()){
+          fin>>name>>evts;
+          if(evts>0) {
+		temp_name.push_back( name ); 
+ 	  }//fout<<name<<endl;
+        }
+        fin.close();
+        int number_of_files = temp_name.size() - 1;//bug fix for repeating the last file.	
+        for(int i = 0; i < number_of_files; i++){
+		fout<<temp_name[i]<<endl;
+	}
+        fout.close();	
 	
-	
+	/*	
 	ifstream infile;
 	infile.open(inputFile);
 	string name;
 	getline(infile,name);
 	infile.close();
+        */
 	
-
-	/*string filelist=inputFile;
-	size_t npos=filelist.size();
-	filelist.insert(npos-5,"new");
-	cout<<filelist<<endl;
-	
-	char inputFile2[500];
-	sprintf(inputFile2, "%s",filelist.data());
-	ofstream fout(inputFile2);
-	
-	ifstream fin(inputFile);
-	
-	string name;
-	int evts;
-	while(!fin.eof()){
-	  fin>>name>>evts;
-	  if(evts>0) fout<<name<<endl;
-	}
-	fin.close();
-	fout.close();*/
-
 	std::size_t found = name.find("MuDst.root");
 	if(found!=std::string::npos)
 		iMuDst = 1;
@@ -115,7 +122,7 @@ void doEvent(Int_t nEvents=-1, const Char_t *inputFile="root://xrdstar.rcf.bnl.g
 	if(iMuDst){
 		char theFilter[80];
 		sprintf(theFilter,".MuDst.root:MuDst.root");
-		StMuDstMaker *microMaker = new StMuDstMaker(0,0,"",inputFile,theFilter,1000);
+		StMuDstMaker *microMaker = new StMuDstMaker(0,0,"",inputFile2,theFilter,1000);
 		microMaker->Init();
 		microMaker->SetStatus("*",1);
 
@@ -130,7 +137,7 @@ void doEvent(Int_t nEvents=-1, const Char_t *inputFile="root://xrdstar.rcf.bnl.g
                 //StEpcMaker *epc=new StEpcMaker();
                 //epc->setPrint(kFALSE);
 	}else{
-        StPicoDstMaker *picoMaker = new StPicoDstMaker(StPicoDstMaker::IoRead,inputFile,"picoDst"); 
+        StPicoDstMaker *picoMaker = new StPicoDstMaker(StPicoDstMaker::IoRead,inputFile2,"picoDst"); 
 	}
 
 	St_db_Maker *dbMk = new St_db_Maker("StarDb", "MySQL:StarDb", "$STAR/StarDb","StarDb");
