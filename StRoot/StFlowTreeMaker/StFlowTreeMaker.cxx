@@ -264,7 +264,7 @@ Bool_t StFlowTreeMaker::processPicoEvent()
   Int_t nTrks    = 0;
 
   //Q-vectors
-  TComplex Q_n1_pt[9][2], Q_0_pt[9][2];//pt 1 dimention
+  TComplex Q_n1_pt[20][2], Q_0_pt[20][2];//pt 1 dimention
   TComplex Q_n3_1_FMSplus, Q_0_1_FMSplus;
   TComplex Q_n3_1_TPCminus, Q_0_1_TPCminus;
   TComplex Q_n3_1_TPCplus, Q_0_1_TPCplus;
