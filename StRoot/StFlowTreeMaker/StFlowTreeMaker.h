@@ -193,6 +193,7 @@ class StFlowTreeMaker : public StMaker {
 		StEvtData      mEvtData;
 		TTree          *mEvtTree;            // Pointer to the event tree
 
+		Int_t		   mVn; 				 // vn harmonic order
 		Double_t       mMaxVtxR;             // Maximum vertex r
 		Double_t       mMaxVtxZ;             // Maximum vertex z
 		Double_t       mMaxVzDiff;           // Maximum VpdVz-TpcVz
@@ -258,7 +259,7 @@ class StFlowTreeMaker : public StMaker {
 
 		ClassDef(StFlowTreeMaker, 1)
 };
-
+inline void StFlowTreeMaker::setVnHarmonics(const Double_t n_) { mVn = n_; }
 inline void StFlowTreeMaker::setMaxVtxR(const Double_t max) { mMaxVtxR = max; }
 inline void StFlowTreeMaker::setMaxVtxZ(const Double_t max) { mMaxVtxZ = max; }
 inline void StFlowTreeMaker::setMaxVzDiff(const Double_t max) { mMaxVzDiff = max; }

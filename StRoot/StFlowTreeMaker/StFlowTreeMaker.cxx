@@ -6,7 +6,7 @@ ClassImp(StFlowTreeMaker)
 //_____________________________________________________________________________
 StFlowTreeMaker::StFlowTreeMaker(const Char_t *name) : StMaker(name), 
 mFillTree(0), mFillHisto(1), mPrintConfig(1), mPrintMemory(0), mPrintCpu(0), 
-mStreamName("st_physics"), fOutFile(0), mOutFileName(""), mEvtTree(0), 
+mStreamName("st_physics"), fOutFile(0), mOutFileName(""), mEvtTree(0), mVn(2), 
 mMaxVtxR(1.0), mMaxVtxZ(40.0), mMaxVzDiff(3.0), mMinTrkPt(0.1), mMaxTrkEta(2.), 
 mMinNHitsFit(15), mMinNHitsFitRatio(0.51), mMinNHitsDedx(10), mMaxDca(3.), 
 mMaxnSigmaE(2.5), mMaxBeta2TOF(0.03),mEmcCollection(nullptr), mEmcPosition(nullptr), 
@@ -306,7 +306,7 @@ Bool_t StFlowTreeMaker::processPicoEvent()
           if(Et<0.01) continue;
 
           double w = Et;
-          Q_n3_1_FMSplus += q_vector(2, 1, w, phi);
+          Q_n3_1_FMSplus += q_vector(mVn, 1, w, phi);
           Q_0_1_FMSplus += q_vector(0, 1, w, phi);
           
           //calculate QnA
@@ -415,13 +415,13 @@ Bool_t StFlowTreeMaker::processPicoEvent()
     //QnB and QnC event plane Q vectors:
     if( trkEta < -0.5 && trkEta > -1.0 ){
 
-      Q_n3_1_TPCminus += q_vector(2, 1, weight, phi);
+      Q_n3_1_TPCminus += q_vector(mVn, 1, weight, phi);
       Q_0_1_TPCminus += q_vector(0, 1, weight, phi);
 
     }
     if( trkEta > 0.5 && trkEta < 1.0 ){
 
-      Q_n3_1_TPCplus += q_vector(2, 1, weight, phi);
+      Q_n3_1_TPCplus += q_vector(mVn, 1, weight, phi);
       Q_0_1_TPCplus += q_vector(0, 1, weight, phi);
 
     }
@@ -432,12 +432,12 @@ Bool_t StFlowTreeMaker::processPicoEvent()
 
         if( pTrack->charge() == +1 ){//positive charge
 
-            Q_n1_pt[ipt][0] += q_vector(+2, 1, weight, phi);
+            Q_n1_pt[ipt][0] += q_vector(mVn, 1, weight, phi);
             Q_0_pt[ipt][0] += q_vector(0, 1, weight, phi);
         }
         if( pTrack->charge() == -1 ){//negative charge
 
-            Q_n1_pt[ipt][1] += q_vector(+2, 1, weight, phi);
+            Q_n1_pt[ipt][1] += q_vector(mVn, 1, weight, phi);
             Q_0_pt[ipt][1] += q_vector(0, 1, weight, phi);
         }
 
