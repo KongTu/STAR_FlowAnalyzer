@@ -222,6 +222,7 @@ class StFlowTreeMaker : public StMaker {
 		*/
 		//define histograms ongoing...
 		TH1D           *hEvent;
+		TH1D		   *hVtxZ;
 		TH2D           *hVtxYvsVtxX;
 		TH2D           *hVPDVzvsTPCVz;
 		TH1D           *hVzDiff;
@@ -229,11 +230,7 @@ class StFlowTreeMaker : public StMaker {
 		TH1D           *hCentrality;
 
 		//Qvector histograms for PCA
-		TH1D           *hQnAQnB[NPCAbin][NPCAbin];
-		TH1D           *hQnCos[NPCAbin];
-		TH1D           *hQnSin[NPCAbin];
-		TH1D           *hNtrk[NPCAbin];
-		TH1D           *hNANB[NPCAbin][NPCAbin];
+
 
 		TH2D           *hdEdxvsP;
 		TH2D           *hdNdxvsP;
