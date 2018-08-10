@@ -136,8 +136,8 @@ Int_t StFlowTreeMaker::Make()
 //_____________________________________________________________________________
 Bool_t StFlowTreeMaker::processPicoEvent()
 {
-  double PCAPtBin[10] = {0.2,0.5,0.8,1.2,1.6,2,2.5,3,4,6};
-  double etaBin[] = {-1.0,-0.9,-0.8,-0.7,-0.6,-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0};
+  double PCAPtBin[15] = {0.2,0.5,0.8,1.2,1.6,2,2.5,3,4,6,8,10,12,15,20};
+  // double etaBin[] = {-1.0,-0.9,-0.8,-0.7,-0.6,-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0};
 
   if(mFillHisto) hEvent->Fill(0.5);
   
@@ -262,7 +262,7 @@ Bool_t StFlowTreeMaker::processPicoEvent()
   if(myCentrality<0) return kFALSE;
   
   Int_t nTrks    = 0;
-  
+
   //Q-vectors
   TComplex Q_n1_pt[9][2], Q_0_pt[9][2];//pt 1 dimention
   TComplex Q_n3_1_FMSplus, Q_0_1_FMSplus;
@@ -427,7 +427,7 @@ Bool_t StFlowTreeMaker::processPicoEvent()
     }
 
     /*start pT*/
-    for(int ipt = 0; ipt < 9; ipt++){
+    for(int ipt = 0; ipt < 14; ipt++){
       if( pt > PCAPtBin[ipt] && pt < PCAPtBin[ipt+1] ){
 
         if( pTrack->charge() == +1 ){//positive charge
@@ -484,7 +484,7 @@ Bool_t StFlowTreeMaker::processPicoEvent()
 
   /*pt vn*/
 
-    for(int ipt = 0; ipt < 9; ipt++){
+    for(int ipt = 0; ipt < 14; ipt++){
       for(int charge = 0; charge < 2; charge++){
 
         TComplex N_2_trk, D_2_trk;
@@ -642,7 +642,7 @@ void StFlowTreeMaker::bookHistos()
     cn_QaQc[icent] = new TH1D(Form("cn_QaQc_%d",icent),"cn_QaQc",100,-1,1);
     cn_QbQc[icent] = new TH1D(Form("cn_QbQc_%d",icent),"cn_QbQc",100,-1,1);
 
-    for(int ipt = 0; ipt < 9; ipt++){
+    for(int ipt = 0; ipt < 14; ipt++){
       for(int charge = 0; charge < 2; charge++){
 
         //cn_tracker[ipt][charge] = new TH1D(Form("cn_tracker_%d_%d", ipt, charge),"cn_tracker",100,-1,1);

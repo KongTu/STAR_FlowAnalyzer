@@ -239,10 +239,10 @@ class StFlowTreeMaker : public StMaker {
 		TH2D           *hBetavsP;
 		TH2D 		   *hFmsXYdis;
 
-		TH1D* cn_tracker[9][2];
-		TH1D* cn_tracker_fms[10][9][2];
-		TH1D* cn_tracker_fms_real[10][9][2];
-		TH1D* cn_tracker_fms_imag[10][9][2];
+		TH1D* cn_tracker[20][2];
+		TH1D* cn_tracker_fms[10][20][2];
+		TH1D* cn_tracker_fms_real[10][20][2];
+		TH1D* cn_tracker_fms_imag[10][20][2];
 
 		TH1D* cn_QbQc[10];
 		TH1D* cn_QaQb[10];
