@@ -223,6 +223,7 @@ class StFlowTreeMaker : public StMaker {
 		//define histograms ongoing...
 		TH1D           *hEvent;
 		TH1D		   *hVtxZ;
+		TH1D		   *hRefMult;
 		TH2D           *hVtxYvsVtxX;
 		TH2D           *hVPDVzvsTPCVz;
 		TH1D           *hVzDiff;
@@ -239,19 +240,19 @@ class StFlowTreeMaker : public StMaker {
 		TH2D 		   *hFmsXYdis;
 
 		TH1D* cn_tracker[9][2];
-		TH1D* cn_tracker_fms[9][2];
-		TH1D* cn_tracker_fms_real[9][2];
-		TH1D* cn_tracker_fms_imag[9][2];
+		TH1D* cn_tracker_fms[10][9][2];
+		TH1D* cn_tracker_fms_real[10][9][2];
+		TH1D* cn_tracker_fms_imag[10][9][2];
 
-		TH1D* cn_QbQc;
-		TH1D* cn_QaQb;
-		TH1D* cn_QaQc;
-		TH1D* cn_Qa_real;
-		TH1D* cn_Qb_real;
-		TH1D* cn_Qc_real;
-		TH1D* cn_Qa_imag;
-		TH1D* cn_Qb_imag;
-		TH1D* cn_Qc_imag;
+		TH1D* cn_QbQc[10];
+		TH1D* cn_QaQb[10];
+		TH1D* cn_QaQc[10];
+		TH1D* cn_Qa_real[10];
+		TH1D* cn_Qb_real[10];
+		TH1D* cn_Qc_real[10];
+		TH1D* cn_Qa_imag[10];
+		TH1D* cn_Qb_imag[10];
+		TH1D* cn_Qc_imag[10];
 
 	
 

@@ -240,14 +240,29 @@ Bool_t StFlowTreeMaker::processPicoEvent()
 
   memset(mNHitsFit, 0, sizeof(mNHitsFit));
   memset(mNHitsPoss, 0, sizeof(mNHitsPoss));
+  //centrality
+  Int_t   NCentbin = 9;
+  Int_t   CentralityBins  [9] = { 377, 327, 248, 186, 138, 99, 68, 45, 26} ;
+  Int_t   MiddleBinID     [9] = { 0,1,2,3,4,5,6,7,8};  // ID Number
+    
+  Int_t   myCentrality=-1;
 
-  Int_t nTrks    = 0;
-  Int_t nTrkPt[NPCAbin] = {0};
-  TComplex Qn[NPCAbin];
+  hRefMult->Fill( mRefMult );
+  
+  for(int i=0;i!=9;i++){
+        if( mRefMult > CentralityBins[i] ){
+            myCentrality = MiddleBinID[i];
+            break;
+        }
+        else{
+            myCentrality = -1;
+        }
+    }
+    
+  if(myCentrality<0) return kFALSE;
   
   //Q-vectors
   TComplex Q_n1_pt[9][2], Q_0_pt[9][2];//pt 1 dimention
-  //TComplex Q_n1_1[20][9][2], Q_0_1[20][9][2];//eta,pt 2 dimention
   TComplex Q_n3_1_FMSplus, Q_0_1_FMSplus;
   TComplex Q_n3_1_TPCminus, Q_0_1_TPCminus;
   TComplex Q_n3_1_TPCplus, Q_0_1_TPCplus;
@@ -431,50 +446,57 @@ Bool_t StFlowTreeMaker::processPicoEvent()
   }//end of track loop
   
 
+  //put centrality cut here. 
+
 /*Three sub-events resolution*/
 
-  TComplex N_2_trk, D_2_trk;
-  N_2_trk = Q_n3_1_TPCplus*TComplex::Conjugate(Q_n3_1_TPCminus);
-  D_2_trk = Q_0_1_TPCplus*Q_0_1_TPCminus;
+  for(int icent = 0; icent < NCentbin; icent++){
 
-  cn_QbQc->Fill(N_2_trk.Re()/D_2_trk.Re(), D_2_trk.Re());
+    if(myCentrality!=icent) continue;
 
-  N_2_trk = Q_n3_1_FMSplus*TComplex::Conjugate(Q_n3_1_TPCminus);
-  D_2_trk = Q_0_1_FMSplus*Q_0_1_TPCminus;
+    TComplex N_2_trk, D_2_trk;
+    N_2_trk = Q_n3_1_TPCplus*TComplex::Conjugate(Q_n3_1_TPCminus);
+    D_2_trk = Q_0_1_TPCplus*Q_0_1_TPCminus;
 
-  cn_QaQb->Fill(N_2_trk.Re()/D_2_trk.Re(), D_2_trk.Re());
+    cn_QbQc[icent]->Fill(N_2_trk.Re()/D_2_trk.Re(), D_2_trk.Re());
 
-  N_2_trk = Q_n3_1_FMSplus*TComplex::Conjugate(Q_n3_1_TPCplus);
-  D_2_trk = Q_0_1_FMSplus*Q_0_1_TPCplus;
+    N_2_trk = Q_n3_1_FMSplus*TComplex::Conjugate(Q_n3_1_TPCminus);
+    D_2_trk = Q_0_1_FMSplus*Q_0_1_TPCminus;
 
-  cn_QaQc->Fill(N_2_trk.Re()/D_2_trk.Re(), D_2_trk.Re());
+    cn_QaQb[icent]->Fill(N_2_trk.Re()/D_2_trk.Re(), D_2_trk.Re());
 
-  cn_Qa_real->Fill(Q_n3_1_FMSplus.Re()/Q_0_1_FMSplus.Re(), Q_0_1_FMSplus.Re() );
-  cn_Qa_imag->Fill(Q_n3_1_FMSplus.Im()/Q_0_1_FMSplus.Re(), Q_0_1_FMSplus.Re() );
- 
-  cn_Qb_real->Fill(Q_n3_1_TPCminus.Re()/Q_0_1_TPCminus.Re(), Q_0_1_TPCminus.Re() );
-  cn_Qb_imag->Fill(Q_n3_1_TPCminus.Im()/Q_0_1_TPCminus.Re(), Q_0_1_TPCminus.Re() );
+    N_2_trk = Q_n3_1_FMSplus*TComplex::Conjugate(Q_n3_1_TPCplus);
+    D_2_trk = Q_0_1_FMSplus*Q_0_1_TPCplus;
 
-  cn_Qc_real->Fill(Q_n3_1_TPCplus.Re()/Q_0_1_TPCplus.Re(), Q_0_1_TPCplus.Re() );
-  cn_Qc_imag->Fill(Q_n3_1_TPCplus.Im()/Q_0_1_TPCplus.Re(), Q_0_1_TPCplus.Re() );
+    cn_QaQc[icent]->Fill(N_2_trk.Re()/D_2_trk.Re(), D_2_trk.Re());
+
+    cn_Qa_real[icent]->Fill(Q_n3_1_FMSplus.Re()/Q_0_1_FMSplus.Re(), Q_0_1_FMSplus.Re() );
+    cn_Qa_imag[icent]->Fill(Q_n3_1_FMSplus.Im()/Q_0_1_FMSplus.Re(), Q_0_1_FMSplus.Re() );
+   
+    cn_Qb_real[icent]->Fill(Q_n3_1_TPCminus.Re()/Q_0_1_TPCminus.Re(), Q_0_1_TPCminus.Re() );
+    cn_Qb_imag[icent]->Fill(Q_n3_1_TPCminus.Im()/Q_0_1_TPCminus.Re(), Q_0_1_TPCminus.Re() );
+
+    cn_Qc_real[icent]->Fill(Q_n3_1_TPCplus.Re()/Q_0_1_TPCplus.Re(), Q_0_1_TPCplus.Re() );
+    cn_Qc_imag[icent]->Fill(Q_n3_1_TPCplus.Im()/Q_0_1_TPCplus.Re(), Q_0_1_TPCplus.Re() );
 
 
-/*pt vn*/
+  /*pt vn*/
 
-  for(int ipt = 0; ipt < 9; ipt++){
-    for(int charge = 0; charge < 2; charge++){
+    for(int ipt = 0; ipt < 9; ipt++){
+      for(int charge = 0; charge < 2; charge++){
 
-      TComplex N_2_trk, D_2_trk;
-      N_2_trk = Q_n1_pt[ipt][charge] * TComplex::Conjugate( Q_n3_1_FMSplus );
-      D_2_trk = Q_0_pt[ipt][charge]*Q_0_1_FMSplus;
+        TComplex N_2_trk, D_2_trk;
+        N_2_trk = Q_n1_pt[ipt][charge] * TComplex::Conjugate( Q_n3_1_FMSplus );
+        D_2_trk = Q_0_pt[ipt][charge]*Q_0_1_FMSplus;
 
-      cn_tracker_fms[ipt][charge]->Fill(N_2_trk.Re()/D_2_trk.Re(), D_2_trk.Re());
+        cn_tracker_fms[icent][ipt][charge]->Fill(N_2_trk.Re()/D_2_trk.Re(), D_2_trk.Re());
 
-      cn_tracker_fms_real[ipt][charge]->Fill(Q_n1_pt[ipt][charge].Re()/Q_0_pt[ipt][charge].Re(), Q_0_pt[ipt][charge].Re());
-      cn_tracker_fms_imag[ipt][charge]->Fill(Q_n1_pt[ipt][charge].Im()/Q_0_pt[ipt][charge].Re(), Q_0_pt[ipt][charge].Re());
+        cn_tracker_fms_real[icent][ipt][charge]->Fill(Q_n1_pt[ipt][charge].Re()/Q_0_pt[ipt][charge].Re(), Q_0_pt[ipt][charge].Re());
+        cn_tracker_fms_imag[icent][ipt][charge]->Fill(Q_n1_pt[ipt][charge].Im()/Q_0_pt[ipt][charge].Re(), Q_0_pt[ipt][charge].Re());
 
+      }
     }
-  }
+  } 
 
 
   mNTrks       = nTrks;
@@ -595,6 +617,7 @@ void StFlowTreeMaker::bookHistos()
 	hEvent->GetXaxis()->SetBinLabel(9,"VPD5HM");
 
   hVtxZ = new TH1D("hVtxZ","hVtxZ",1000,-50,50);
+  refMult = new TH1D("refMult","refMult",50000,0,50000);
 
 	hVtxYvsVtxX = new TH2D("hVtxYvsVtxX","hVtxYvsVtxX; V_{x} (cm); V_{y} (cm)",120,-3,3,120,-3,3); 
 	hVPDVzvsTPCVz = new TH2D("hVPDVzvsTPCVz","hVPDVzvsTPCVz; TPC V_{z} (cm); VPD V_{z} (cm)",200,-50,50,200,-50,50);
@@ -603,29 +626,31 @@ void StFlowTreeMaker::bookHistos()
 	hCentrality = new TH1D("hCentrality","hCentrality; mCentrality",16,0,16);
     
   //Q vector histograms:
+  for(int icent = 0; icent < 9; icent++){
 
-  cn_Qa_real = new TH1D("cn_Qa_real","cn_Qa_real",100,-1,1);
-  cn_Qb_real = new TH1D("cn_Qb_real","cn_Qb_real",100,-1,1);
-  cn_Qc_real = new TH1D("cn_Qc_real","cn_Qc_real",100,-1,1);
-  
-  cn_Qa_imag = new TH1D("cn_Qa_imag","cn_Qa_imag",100,-1,1);
-  cn_Qb_imag = new TH1D("cn_Qb_imag","cn_Qb_imag",100,-1,1);
-  cn_Qc_imag = new TH1D("cn_Qc_imag","cn_Qc_imag",100,-1,1);
+    cn_Qa_real[icent] = new TH1D(Form("cn_Qa_real_%d",icent),"cn_Qa_real",100,-1,1);
+    cn_Qb_real[icent] = new TH1D(Form("cn_Qb_real_%d",icent),"cn_Qb_real",100,-1,1);
+    cn_Qc_real[icent] = new TH1D(Form("cn_Qc_real_%d",icent),"cn_Qc_real",100,-1,1);
+    
+    cn_Qa_imag[icent] = new TH1D(Form("cn_Qa_imag_%d",icent),"cn_Qa_imag",100,-1,1);
+    cn_Qb_imag[icent] = new TH1D(Form("cn_Qb_imag_%d",icent),"cn_Qb_imag",100,-1,1);
+    cn_Qc_imag[icent] = new TH1D(Form("cn_Qc_imag_%d",icent),"cn_Qc_imag",100,-1,1);
 
-  cn_QaQb = new TH1D("cn_QaQb","cn_QaQb",100,-1,1);
-  cn_QaQc = new TH1D("cn_QaQc","cn_QaQc",100,-1,1);
-  cn_QbQc = new TH1D("cn_QbQc","cn_QbQc",100,-1,1);
+    cn_QaQb[icent] = new TH1D(Form("cn_QaQb_%d",icent),"cn_QaQb",100,-1,1);
+    cn_QaQc[icent] = new TH1D(Form("cn_QaQc_%d",icent),"cn_QaQc",100,-1,1);
+    cn_QbQc[icent] = new TH1D(Form("cn_QbQc_%d",icent),"cn_QbQc",100,-1,1);
 
-  for(int ipt = 0; ipt < 9; ipt++){
-    for(int charge = 0; charge < 2; charge++){
+    for(int ipt = 0; ipt < 9; ipt++){
+      for(int charge = 0; charge < 2; charge++){
 
-      //cn_tracker[ipt][charge] = new TH1D(Form("cn_tracker_%d_%d", ipt, charge),"cn_tracker",100,-1,1);
-      cn_tracker_fms[ipt][charge] = new TH1D(Form("cn_tracker_fms_%d_%d", ipt, charge),"cn_tracker_fms",100,-1,1);
-      cn_tracker_fms_real[ipt][charge] = new TH1D(Form("cn_tracker_fms_real_%d_%d", ipt, charge),"cn_tracker_fms",100,-1,1);
-      cn_tracker_fms_imag[ipt][charge] = new TH1D(Form("cn_tracker_fms_imag_%d_%d", ipt, charge),"cn_tracker_fms",100,-1,1);
+        //cn_tracker[ipt][charge] = new TH1D(Form("cn_tracker_%d_%d", ipt, charge),"cn_tracker",100,-1,1);
+        cn_tracker_fms[icent][ipt][charge] = new TH1D(Form("cn_tracker_fms_%d_%d_%d",icent, ipt, charge),"cn_tracker_fms",100,-1,1);
+        cn_tracker_fms_real[icent][ipt][charge] = new TH1D(Form("cn_tracker_fms_real_%d_%d_%d",icent, ipt, charge),"cn_tracker_fms",100,-1,1);
+        cn_tracker_fms_imag[icent][ipt][charge] = new TH1D(Form("cn_tracker_fms_imag_%d_%d_%d",icent, ipt, charge),"cn_tracker_fms",100,-1,1);
 
+      }
     }
-  }
+  } 
     
 	hdEdxvsP = new TH2D("hdEdxvsP","hdEdxvsP; p (GeV/c); dE/dx (KeV/cm)",300,0,15,400,0,20);
 	hdNdxvsP = new TH2D("hdNdxvsP","hdNdxvsP; p (GeV/c); dN/dx",300,0,15,400,0,200);
