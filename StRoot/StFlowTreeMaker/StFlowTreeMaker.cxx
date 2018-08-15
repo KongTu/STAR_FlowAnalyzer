@@ -7,8 +7,8 @@ ClassImp(StFlowTreeMaker)
 StFlowTreeMaker::StFlowTreeMaker(const Char_t *name) : StMaker(name), 
 mFillTree(0), mFillHisto(1), mPrintConfig(1), mPrintMemory(0), mPrintCpu(0), 
 mStreamName("st_physics"), fOutFile(0), mOutFileName(""), mEvtTree(0), mVn(2), 
-mMaxVtxR(1.0), mMaxVtxZ(40.0), mMaxVzDiff(3.0), mMinTrkPt(0.1), mMaxTrkEta(2.), 
-mMinNHitsFit(15), mMinNHitsFitRatio(0.51), mMinNHitsDedx(10), mMaxDca(3.), 
+mMaxVtxR(2.0), mMaxVtxZ(30.0), mMaxVzDiff(3.0), mMinTrkPt(0.1), mMaxTrkEta(2.), 
+mMinNHitsFit(15), mMinNHitsFitRatio(0.52), mMinNHitsDedx(10), mMaxDca(3.), 
 mMaxnSigmaE(2.5), mMaxBeta2TOF(0.03),mEmcCollection(nullptr), mEmcPosition(nullptr), 
 mEmcGeom{},mEmcIndex{}
 {
@@ -136,7 +136,7 @@ Int_t StFlowTreeMaker::Make()
 //_____________________________________________________________________________
 Bool_t StFlowTreeMaker::processPicoEvent()
 {
-  double PCAPtBin[15] = {0.2,0.5,0.8,1.2,1.6,2,2.5,3,4,6,8,10,12,15,20};
+  double PCAPtBin[10] = {0.2,0.5,0.8,1.2,1.6,2,2.5,3,4,6};
   // double etaBin[] = {-1.0,-0.9,-0.8,-0.7,-0.6,-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0};
 
   if(mFillHisto) hEvent->Fill(0.5);
@@ -311,13 +311,6 @@ Bool_t StFlowTreeMaker::processPicoEvent()
           Q_n3_1_FMSplus += q_vector(mVn, 1, w, phi);
           Q_0_1_FMSplus += q_vector(0, 1, w, phi);
           
-          //calculate QnA
-          // for(int iN=2;iN<NVn;iN++)
-          // {
-          //     TComplex tmp(1,iN*phi,1);
-          //     QnA[iN] += Et*tmp;
-          //     QnA_w[iN] += Et;
-          // }
       }
   }//end of FMS
 
@@ -408,28 +401,31 @@ Bool_t StFlowTreeMaker::processPicoEvent()
     
     if(TMath::Abs(trkEta)>1.) continue;
     if(pTrack->nHitsFit()<15) continue;
-    if(pTrack->nHitsFit()*1./pTrack->nHitsMax()<0.51) continue;//zhenyu's version is 0.52
-    if(dca>1.) continue;
-    if(pt < 0.2) continue;
-
+    if(pTrack->nHitsFit()*1./pTrack->nHitsMax()<0.52) continue;//zhenyu's version is 0.52
+    if(dca>3.) continue;
+    
     double weight = 1.0;
 
-    //QnB and QnC event plane Q vectors:
-    if( trkEta < -0.5 && trkEta > -1.0 ){
+    if( pt > 0.4 && pt < 2.0 ){
+      //QnB and QnC event plane Q vectors:
+      if( trkEta < -0.5 && trkEta > -1.0 ){
 
-      Q_n3_1_TPCminus += q_vector(mVn, 1, weight, phi);
-      Q_0_1_TPCminus += q_vector(0, 1, weight, phi);
+        Q_n3_1_TPCminus += q_vector(mVn, 1, weight, phi);
+        Q_0_1_TPCminus += q_vector(0, 1, weight, phi);
 
+      }
+      if( trkEta > 0.5 && trkEta < 1.0 ){
+
+        Q_n3_1_TPCplus += q_vector(mVn, 1, weight, phi);
+        Q_0_1_TPCplus += q_vector(0, 1, weight, phi);
+
+      }
     }
-    if( trkEta > 0.5 && trkEta < 1.0 ){
 
-      Q_n3_1_TPCplus += q_vector(mVn, 1, weight, phi);
-      Q_0_1_TPCplus += q_vector(0, 1, weight, phi);
-
-    }
+    if(pt < 0.2) continue;//for POI pt selections
 
     /*start pT*/
-    for(int ipt = 0; ipt < 14; ipt++){
+    for(int ipt = 0; ipt < 9; ipt++){
       if( pt > PCAPtBin[ipt] && pt < PCAPtBin[ipt+1] ){
 
         if( pTrack->charge() == +1 ){//positive charge
@@ -486,7 +482,7 @@ Bool_t StFlowTreeMaker::processPicoEvent()
 
   /*pt vn*/
 
-    for(int ipt = 0; ipt < 14; ipt++){
+    for(int ipt = 0; ipt < 9; ipt++){
       for(int charge = 0; charge < 2; charge++){
 
         TComplex N_2_trk, D_2_trk;
@@ -644,7 +640,7 @@ void StFlowTreeMaker::bookHistos()
     cn_QaQc[icent] = new TH1D(Form("cn_QaQc_%d",icent),"cn_QaQc",100,-1,1);
     cn_QbQc[icent] = new TH1D(Form("cn_QbQc_%d",icent),"cn_QbQc",100,-1,1);
 
-    for(int ipt = 0; ipt < 14; ipt++){
+    for(int ipt = 0; ipt < 9; ipt++){
       for(int charge = 0; charge < 2; charge++){
 
         //cn_tracker[ipt][charge] = new TH1D(Form("cn_tracker_%d_%d", ipt, charge),"cn_tracker",100,-1,1);
